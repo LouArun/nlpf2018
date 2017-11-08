@@ -41,8 +41,20 @@ class LouvoisPlayer extends Player
         // How can i display the result of each round ? $this->prettyDisplay()
         // -------------------------------------    -----------------------------------------------------
 
-        $choice = parent::scissorsChoice();
-
-        return $choice;
+        $paperchoice = parent::paperChoice();
+        $scissorschoice = parent::scissorsChoice();
+        $rockchoice = parent::rockChoice();
+        if ($this->result->getLastChoiceFor($this->opponentSide) === 'scissors')
+        {
+            return $rockchoice;
+        }
+        else if ($this->result->getLastChoiceFor($this->opponentSide) === 'paper')
+        {
+            return $scissorschoice;
+        }
+        else
+        {
+            return $paperchoice;
+        }
     }
 };
