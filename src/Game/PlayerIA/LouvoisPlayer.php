@@ -41,9 +41,70 @@ class LouvoisPlayer extends Player
         // How can i display the result of each round ? $this->prettyDisplay()
         // -------------------------------------    -----------------------------------------------------
 
-        $paperchoice = parent::paperChoice();
-        $scissorschoice = parent::scissorsChoice();
-        $rockchoice = parent::rockChoice();
+        /*if ($this->result->getLastChoiceFor($this->opponentSide) === 'scissors')
+        {
+            return $rockchoice;
+        }
+        else if ($this->result->getLastChoiceFor($this->opponentSide) === 'paper')
+        {
+            return $scissorschoice;
+        }
+        else
+        {
+            return $paperchoice;
+        }*/
+
+        $choices[0] = parent::rockChoice();
+        $choices[1] = parent::scissorsChoice();
+        $choices[2] = parent::paperChoice();
+        $opponentchoices = $this->result->getChoicesFor($this->opponentSide);
+
+
+        if ($this->result->getNbRound() === 0)
+            return $choices[0];
+        $pcoef = 0;
+        $scoef = 0;
+        $rcoef = 0;
+        
+        if ($this->result->getLastChoiceFor($this->opponentSide) == $choices[1]
+        && $this->result->getLastChoiceFor($this->mySide) == $choices[2])
+            return $choices[0];
+        else if ($this->result->getLastChoiceFor($this->opponentSide) == $choices[2]
+        && $this->result->getLastChoiceFor($this->mySide) == $choices[0])
+            return $choices[1];
+        else if ($this->result->getLastChoiceFor($this->opponentSide) == $choices[2]
+        && $this->result->getLastChoiceFor($this->mySide) == $choices[0])
+            return $choices[2];
+
+        foreach ($opponentchoices as $value) {
+            if ($value === $choices[2])
+                $pcoef++;
+            if ($value === $choices[0])
+                $rcoef++;
+            if ($value === $choices[1])
+                $scoef++;
+        }
+
+        if ($scoef == $rcoef && $scoef == $pcoef)
+        {
+            if ($this->result->getLastChoiceFor($this->opponentSide) == $choices[0])
+                return $choices[2];
+            return $choices[0];
+        }
+        if ($scoef == $rcoef && $scoef == $pcoef)
+        {
+            if ($this->result->getLastChoiceFor($this->opponentSide) == $choices[1])
+                return $choices[0];
+            return $choices[1];
+        }
+        if ($pcoef == $rcoef && $pcoef == $scoef)
+        {  
+            if ($this->result->getLastChoiceFor($this->opponentSide) == $choices[2])
+                return $choices[1];
+            return $choices[2];
+        }
+        return $choices[0];
+/*
         if ($this->result->getLastChoiceFor($this->opponentSide) === 'scissors')
         {
             return $rockchoice;
@@ -55,6 +116,6 @@ class LouvoisPlayer extends Player
         else
         {
             return $paperchoice;
-        }
+        }*/
     }
 };
